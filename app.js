@@ -6,7 +6,15 @@ new Vue({
     monsterHealth: 100
   },
   methods: {
+    attack: function () {
 
+    },
+    specialAttack: function () {
+
+    },
+    heal: function () {
+
+    }
   },
   computed: {
 

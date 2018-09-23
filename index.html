@@ -35,9 +35,9 @@
         </section>
         <section class="row controls" v-show="started">
             <div class="small-12 columns">
-                <button id="attack">ATTACK</button>
-                <button id="special-attack">SPECIAL ATTACK</button>
-                <button id="heal">HEAL</button>
+                <button id="attack" @click="attack">ATTACK</button>
+                <button id="special-attack" @click="specialAttack">SPECIAL ATTACK</button>
+                <button id="heal" @click="heal">HEAL</button>
                 <button id="give-up" @click="started = false">GIVE UP</button>
             </div>
         </section>
@@ -45,7 +45,7 @@
             <div class="small-12 columns">
                 <ul>
                     <li>
-
+                        <template></template>
                     </li>
                 </ul>
             </div>
