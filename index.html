@@ -35,26 +35,23 @@
 		</section>
 		<section class="row controls" v-show="started">
 			<div class="small-12 columns">
-				<button id="attack" @click="attack(attackMaxValue)">ATTACK</button>
-				<button id="special-attack" @click="attack(specialAttackMaxValue)">SPECIAL ATTACK</button>
-				<button id="heal" @click="heal(healMaxValue)">HEAL</button>
+				<button id="attack" @click="attack(playerAttackMin, playerAttackMax)">ATTACK</button>
+				<button id="special-attack" @click="attack(specialAttackMin, specialAttackMax)">SPECIAL ATTACK</button>
+				<button id="heal" @click="heal">HEAL</button>
 				<button id="give-up" @click="started = false">GIVE UP</button>
 			</div>
 		</section>
-		<section class="row log">
+		<section class="row log" v-if="turns.length > 0">
 			<div class="small-12 columns">
-				<ul v-for="">
-					<li>
-						<template>
-							<div></div>
-						</template>
+				<ul>
+					<li v-for="turn in turns" :class="turn.who + '-turn'">
+						{{turn.text}}
 					</li>
 				</ul>
 			</div>
 		</section>
 	</div>
+	<script src="app.js"></script>
 </body>
-<script src="app.js">
-</script>
 
 </html>

@@ -4,33 +4,35 @@ new Vue({
     started: false,
     playerHealth: 100,
     monsterHealth: 100,
-    attackMaxValue: 10,
-    healMaxValue: 5,
-    specialAttackMaxValue: 20,
+    playerAttackMin: 3,
+    playerAttackMax: 10,
+    monsterAttackMin: 5,
+    monsterAttackMax: 12,
+    specialAttackMin: 10,
+    specialAttackMax: 20,
+    healValue: 10,
     turns: []
   },
   methods: {
-    attack: function (range) {
-      var playerDamage = this.randomValue(range);
-      var monsterDamage = this.randomValue(range);
-      this.playerHealth -= playerDamage;
-      this.monsterHealth -= monsterDamage;
-      this.pushTurns([
-        playerDamage,
-        monsterDamage
-      ]);
+    attack: function (min, max) {
+      var damage = this.randomValue(min, max);
+      this.monsterHealth -= damage;
+      this.monsterAttacks();
+      this.pushTurns(damage, max == 20 ? 'whacks' : 'hits', 'player');
     },
-    heal: function (range) {
-      this.playerHealth += this.randomValue(range);
+    heal: function () {
+      this.playerHealth += this.healValue;
       if (this.playerHealth > 100) this.playerHealth = 100;
-      this.playerHealth -= this.randomValue(this.attackMaxValue);
-      this.pushTurns([
-        this.playerDamage,
-        this.monsterDamage
-      ]);
+      this.monsterAttacks();
+      this.pushTurns(this.healValue, 'heals', 'player');
     },
-    randomValue: function (range) {
-      return Math.floor(Math.random() * Math.floor(range));
+    monsterAttacks: function () {
+      var damage = this.randomValue(this.monsterAttackMin, this.monsterAttackMax);
+      this.playerHealth -= damage;
+      this.pushTurns(damage, 'hits', 'monster');
+    },
+    randomValue: function (max, min) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     },
     startNew: function () {
       this.started = true;
@@ -38,10 +40,14 @@ new Vue({
       this.monsterHealth = 100;
       this.turns = [];
     },
-    pushTurns: function (turn) {
-      this.turns.push({
-        player: turn[0],
-        monster: turn[1]
+    pushTurns: function (damage, type, whoIs) {
+      var enemy = whoIs == 'player' ? 'monster' : 'player';
+      var hitOrHeal = type == 'heals' ? 'heals' : type + ' ' + enemy;
+      var text = whoIs + ' ' + hitOrHeal + ' ' + 'for ' + damage;
+
+      this.turns.unshift({
+        who: whoIs,
+        text: text
       });
     }
   },
@@ -49,15 +55,11 @@ new Vue({
     playerHealth: function () {
       if (this.playerHealth < 0 && this.monsterHealth > 0) {
         alert('Player Lost');
-        this.startNew();
+        this.started = false;
       }
       if (this.playerHealth > 0 && this.monsterHealth < 0) {
         alert('Player Won');
-        this.startNew();
-      }
-      if (this.playerHealth < 0 && this.monsterHealth < 0) {
-        alert('Draw');
-        this.startNew();
+        this.started = false;
       }
     }
   }
